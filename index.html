@@ -57,68 +57,66 @@
 
     /* 🔹 Header Section */
     header {
-      margin-bottom: 20px;
       position: relative;
       background: linear-gradient(to right, #ffffff, #eef3f8, #ffffff);
-      padding: 25px 0 80px;
+      padding: 30px 0 100px;
       border-bottom: 3px solid #003366;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    header img {
-      width: 90px;
-      position: absolute;
-      left: 25px;
-      top: 25px;
-      border-radius: 8px;
-    }
-
-    header .title {
       text-align: center;
     }
 
-    header h1 {
+    header img {
+      width: 80px;
+      position: absolute;
+      left: 40px;
+      top: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    header .title h1 {
       margin: 0;
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #003366;
       letter-spacing: 1px;
       text-transform: uppercase;
       font-weight: bold;
     }
 
-    header h3 {
-      margin-top: 5px;
+    header .title h3 {
+      margin-top: 6px;
       font-size: 1.2rem;
-      color: #444;
+      color: #555;
       font-style: italic;
     }
 
-    /* 🔹 Signature Section (Left & Right fixed) */
+    /* 🔹 Signature Section (Fixed Left & Right) */
     .signatures {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-top: 2in;
-      padding: 0 60px;
+      position: absolute;
+      bottom: 20px;
+      left: 0;
+      padding: 0 80px;
       font-weight: bold;
       font-size: 1.1rem;
       color: #2b3a67;
-      text-shadow: 1px 1px 2px #a7a7a7;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      box-sizing: border-box;
     }
 
     .sign-left {
       text-align: left;
-      flex: 1;
     }
 
     .sign-right {
       text-align: right;
-      flex: 1;
     }
 
     .signatures small {
-      color: #555;
+      color: #444;
       font-weight: normal;
     }
 
@@ -148,32 +146,25 @@
         position: static;
         display: block;
         margin: 0 auto 10px auto;
+        width: 70px;
       }
 
-      header h1 {
-        font-size: 1.5rem;
+      header .title h1 {
+        font-size: 1.6rem;
       }
 
-      header h3 {
+      header .title h3 {
         font-size: 1rem;
       }
 
       .signatures {
         flex-direction: column;
+        align-items: center;
         text-align: center;
-        margin-top: 1.5in;
         padding: 0 20px;
-        font-size: 1rem;
-        gap: 15px;
-      }
-
-      .sign-left, .sign-right {
-        text-align: center !important;
-      }
-
-      #viewer img.page {
-        margin: 8px auto;
-        width: 100%;
+        gap: 12px;
+        position: static;
+        margin-top: 60px;
       }
     }
   </style>
