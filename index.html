@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Timed Exam Viewer — Demo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">Exam Portal (Demo)</div>
+    <div class="controls">
+      <label for="studentName">Name: </label><input id="studentName" placeholder="Enter your name" />
+      <button id="startBtn">Start Exam</button>
+      <div id="status">Not started</div>
+      <div id="countdown"></div>
+    </div>
+  </div>
+
+  <div id="viewerWrap">
+    <div id="preMessage" class="centered">
+      <h2>Exam will start when you press <em>Start Exam</em>.</h2>
+      <p>Once started, you will have exactly <strong>2 hours</strong>. Do not reload the page during the exam.</p>
+    </div>
+    <div id="viewer" style="display:none;"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

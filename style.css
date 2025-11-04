@@ -1,0 +1,13 @@
+/* style.css */
+body { margin:0; font-family: Arial, sans-serif; background:#0b1220; color:#e6eef8; }
+.topbar { display:flex; align-items:center; justify-content:space-between; padding:12px 18px; background:#071029; border-bottom:1px solid #193044; }
+.brand { font-weight:700; }
+.controls { display:flex; gap:8px; align-items:center; }
+.controls input { padding:6px 8px; border-radius:4px; border:1px solid #234; background:#081822; color:#fff; }
+.controls button { padding:8px 10px; border-radius:6px; border:0; background:#1f7aef; color:#fff; cursor:pointer; }
+#viewerWrap { padding:18px; min-height:calc(100vh - 72px); box-sizing:border-box; }
+.centered { text-align:center; color:#cfe9ff; }
+#viewer { display:flex; flex-direction:column; align-items:center; gap:12px; }
+.page { width:70%; box-shadow: 0 4px 14px rgba(0,0,0,0.6); background:#fff; }
+.overlay { width:70%; height:20px; pointer-events:none; } /* placeholder overlay */
+@media print { body { display:none !important; } }
