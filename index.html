@@ -1,52 +1,30 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>DBS PG College - Exam Portal</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8">
+  <title>Timed Exam Viewer — Demo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header id="header">
-  <img src="logo.png" id="logo">
-  <div id="headerCenter">
-    <div id="collegeName">DBS PG College, Kanpur</div>
-    <div id="department">Department of Mathematics</div>
+  <div class="topbar">
+    <div class="brand">Exam Portal (Demo)</div>
+    <div class="controls">
+      <label for="studentName">Name: </label><input id="studentName" placeholder="Enter your name" />
+      <button id="startBtn">Start Exam</button>
+      <div id="status">Not started</div>
+      <div id="countdown"></div>
+    </div>
   </div>
-  <div id="headerRightLeft">
-    <div id="leftName">Dr. Ashish Kumar Shukla<br><span>Assistant Professor</span></div>
-    <div id="rightName">Prof. Anil Kumar Mishra<br><span>Principal</span></div>
+
+  <div id="viewerWrap">
+    <div id="preMessage" class="centered">
+      <h2>Exam will start when you press <em>Start Exam</em>.</h2>
+      <p>Once started, you will have exactly <strong>2 hours</strong>. Do not reload the page during the exam.</p>
+    </div>
+    <div id="viewer" style="display:none;"></div>
   </div>
-</header>
 
-<main id="main">
-<section id="loginSection" class="card">
-<h2>Login to start exam</h2>
-<label>Admission No:<br><input id="adm" placeholder="Enter admission number"></label><br>
-<label>Name:<br><input id="name" placeholder="Enter full name"></label><br>
-<div class="row">
-<button id="loginBtn">Login & Start Exam</button>
-<button id="exportBtn">Export Records (CSV)</button>
-</div>
-<div id="msg" class="muted"></div>
-</section>
-
-<section id="preExam" class="card" style="display:none;">
-<h3>Click below to open the paper. Once opened, the timer (2 hours) will start.</h3>
-<button id="openBtn">Start Exam</button>
-</section>
-
-<section id="examSection" style="display:none;">
-<div id="timer">Time left: 02:00:00</div>
-<div id="pdfContainer">
-<iframe id="pdfFrame" src="exam.pdf" frameborder="0"></iframe>
-</div>
-</section>
-
-<section id="closed" style="display:none;">
-<h2 id="closedMsg"></h2>
-</section>
-</main>
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
