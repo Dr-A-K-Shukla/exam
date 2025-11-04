@@ -1,69 +1,107 @@
-const DURATION_MS = 2*60*60*1000; // 2 hours
-const loginBtn = document.getElementById('loginBtn');
-const exportBtn = document.getElementById('exportBtn');
-const admEl = document.getElementById('adm');
-const nameEl = document.getElementById('name');
-const msgEl = document.getElementById('msg');
-const preExam = document.getElementById('preExam');
-const openBtn = document.getElementById('openBtn');
-const examSection = document.getElementById('examSection');
-const timerEl = document.getElementById('timer');
-const closedSection = document.getElementById('closed');
-const closedMsg = document.getElementById('closedMsg');
+// script.js
+const DURATION_MINUTES = 120; // 2 hours
+const pages = ['page1.png','page2.png']; // images for pages
+const startBtn = document.getElementById('startBtn');
+const viewer = document.getElementById('viewer');
+const preMessage = document.getElementById('preMessage');
+const status = document.getElementById('status');
+const countdownEl = document.getElementById('countdown');
+const nameInput = document.getElementById('studentName');
 
-const RECORDS_KEY = 'exam_records_v1';
-let timerInterval = null;
-let endTime = null;
+function now() { return new Date(); }
 
-function nowIST(){
-  const d = new Date();
-  const utc = d.getTime() + (d.getTimezoneOffset()*60000);
-  const ist = new Date(utc + 5.5*3600000);
-  return ist.toISOString().replace('T',' ').split('.')[0];
-}
-function loadRecords(){try{return JSON.parse(localStorage.getItem(RECORDS_KEY)||'[]')}catch(e){return[]}}
-function saveRecords(arr){localStorage.setItem(RECORDS_KEY,JSON.stringify(arr))}
-function addRecord(adm,name){const recs=loadRecords();recs.push({admission:adm,name:name,time:nowIST()});saveRecords(recs)}
-function exportCSV(){
-  const recs=loadRecords();
-  if(!recs.length){alert('No records');return}
-  let csv='Admission No,Student Name,Login Time (IST)\n';
-  recs.forEach(r=>csv+=`${r.admission},${r.name},${r.time}\n`);
-  const blob=new Blob([csv],{type:'text/csv'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='records.csv';a.click();URL.revokeObjectURL(url);
+function secondsRemaining(end) {
+  return Math.max(0, Math.floor((end - now())/1000));
 }
 
-function beep(){
-  try{
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    const o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(880,ctx.currentTime);
-    o.connect(ctx.destination);o.start();setTimeout(()=>{o.stop();ctx.close()},500);
-  }catch(e){}
+function formatHHMMSS(sec) {
+  const h = Math.floor(sec/3600);
+  const m = Math.floor((sec%3600)/60);
+  const s = sec%60;
+  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
 }
-function closeExam(msg){beep();examSection.style.display='none';closedSection.style.display='block';closedMsg.textContent=msg;sessionStorage.clear();clearInterval(timerInterval)}
-document.addEventListener('visibilitychange',()=>{if(document.hidden)closeExam('Exam closed due to refresh/minimize')});
-window.addEventListener('blur',()=>closeExam('Exam closed due to refresh/minimize'));
-window.addEventListener('beforeunload',()=>closeExam('Exam closed due to refresh/minimize'));
 
-loginBtn.onclick=()=>{
-  const adm=admEl.value.trim(),name=nameEl.value.trim();
-  if(!adm||!name){msgEl.textContent='Please fill all fields';return}
-  addRecord(adm,name);msgEl.textContent='Login successful at '+nowIST();
-  document.getElementById('loginSection').style.display='none';preExam.style.display='block';
-  sessionStorage.setItem('exam_user',JSON.stringify({admission:adm,name:name}));
+function blockShortcuts() {
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('keydown', function(e) {
+    // Block Ctrl+P, Ctrl+S, Ctrl+Shift+I, F12
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 's' || e.key === 'P' || e.key === 'S')) {
+      e.preventDefault();
+      return false;
+    }
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key==='I' || e.key==='i' || e.key==='J' || e.key==='C'))) {
+      e.preventDefault();
+      return false;
+    }
+  }, false);
+  // hide print via CSS media query present in style.css
 }
-openBtn.onclick=()=>{
-  const user=JSON.parse(sessionStorage.getItem('exam_user')||'{}');
-  if(!user.admission){alert('Please login first');return}
-  preExam.style.display='none';examSection.style.display='block';
-  endTime=Date.now()+DURATION_MS;sessionStorage.setItem('exam_end',endTime);
-  timerInterval=setInterval(updateTimer,1000);
+
+function startExamSession(startDate) {
+  // save start in sessionStorage to survive reloads (per tab)
+  sessionStorage.setItem('exam_start', startDate.toISOString());
+  sessionStorage.setItem('exam_name', nameInput.value || '');
+  sessionStorage.setItem('exam_running','1');
+  renderViewer();
+  setupTimer();
 }
-function updateTimer(){
-  const left=endTime-Date.now();
-  if(left<=0){clearInterval(timerInterval);closeExam('Exam time is over. Thank you.');return}
-  const h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),s=Math.floor((left%60000)/1000);
-  timerEl.textContent=`Time left: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+
+function endExam(reason) {
+  // lock viewer
+  document.body.innerHTML = '<div class="centered"><h2>' + reason + '</h2></div>';
 }
-exportBtn.onclick=()=>exportCSV();
+
+function renderViewer() {
+  preMessage.style.display = 'none';
+  viewer.style.display = 'block';
+  viewer.innerHTML = '';
+  pages.forEach(p => {
+    const img = document.createElement('img');
+    img.src = p;
+    img.className = 'page';
+    img.alt = 'Exam page';
+    // prevent dragging
+    img.ondragstart = () => false;
+    viewer.appendChild(img);
+    // transparent overlay to make selection harder
+    const overlay = document.createElement('div');
+    overlay.className = 'overlay';
+    viewer.appendChild(overlay);
+  });
+  blockShortcuts();
+}
+
+function setupTimer() {
+  const start = new Date(sessionStorage.getItem('exam_start'));
+  const end = new Date(start.getTime() + DURATION_MINUTES*60000);
+  status.textContent = 'Exam in progress';
+  const iv = setInterval(() => {
+    const rem = secondsRemaining(end);
+    countdownEl.textContent = 'Time left: ' + formatHHMMSS(rem);
+    if (rem <= 0) {
+      clearInterval(iv);
+      sessionStorage.removeItem('exam_start');
+      endExam('Exam time over. Viewer locked.');
+    }
+  }, 1000);
+}
+
+// initialize if already running in this tab
+if (sessionStorage.getItem('exam_running')) {
+  renderViewer();
+  setupTimer();
+  const storedName = sessionStorage.getItem('exam_name') || '';
+  if (storedName) nameInput.value = storedName;
+  status.textContent = 'Exam in progress';
+} else {
+  status.textContent = 'Not started';
+}
+
+// Start button click handler - student click to start timer
+startBtn.addEventListener('click', () => {
+  if (!nameInput.value.trim()) {
+    if (!confirm('You did not enter your name. Continue as anonymous?')) return;
+  }
+  const startDate = new Date();
+  startExamSession(startDate);
+});
