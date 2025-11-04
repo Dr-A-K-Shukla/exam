@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Timed Exam Viewer — Demo</title>
+  <title>Timed Exam Viewer — DBS PG College Kanpur</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <style>
@@ -12,6 +12,7 @@
       background: #f8f9fa;
     }
 
+    /* 🔹 Top Bar */
     .topbar {
       display: flex;
       flex-wrap: wrap;
@@ -22,7 +23,7 @@
       padding: 10px 15px;
     }
 
-    .topbar .brand {
+    .brand {
       font-weight: bold;
       line-height: 1.4;
     }
@@ -40,36 +41,40 @@
     }
 
     .controls button {
-      background: #d4af37;
+      background: #2b6cb0;
       border: none;
       padding: 6px 12px;
       font-weight: bold;
       cursor: pointer;
       border-radius: 5px;
-      color: #003366;
+      color: #fff;
+      transition: background 0.3s;
     }
 
     .controls button:hover {
-      background: #ffcc00;
+      background: #1e4d7a;
     }
 
+    /* 🔹 Header Section */
     header {
-      text-align: center;
       margin-bottom: 20px;
       position: relative;
-      font-family: 'Times New Roman', serif;
-      background: linear-gradient(to right, #ffffff, #f8f9fa, #ffffff);
-      padding: 20px 0;
-      border-bottom: 3px solid #d4af37;
+      background: linear-gradient(to right, #ffffff, #eef3f8, #ffffff);
+      padding: 25px 0 80px;
+      border-bottom: 3px solid #003366;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
 
     header img {
       width: 90px;
       position: absolute;
-      left: 20px;
-      top: 20px;
+      left: 25px;
+      top: 25px;
       border-radius: 8px;
+    }
+
+    header .title {
+      text-align: center;
     }
 
     header h1 {
@@ -88,19 +93,36 @@
       font-style: italic;
     }
 
-    header .signatures {
+    /* 🔹 Signature Section (Left & Right fixed) */
+    .signatures {
       width: 100%;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       margin-top: 2in;
-      padding: 0 40px;
+      padding: 0 60px;
       font-weight: bold;
-      color: #d4af37;
-      text-shadow: 1px 1px 2px #8b7500, 0 0 8px #ffd700;
-      font-size: 1rem;
+      font-size: 1.1rem;
+      color: #2b3a67;
+      text-shadow: 1px 1px 2px #a7a7a7;
     }
 
+    .sign-left {
+      text-align: left;
+      flex: 1;
+    }
+
+    .sign-right {
+      text-align: right;
+      flex: 1;
+    }
+
+    .signatures small {
+      color: #555;
+      font-weight: normal;
+    }
+
+    /* 🔹 Image Viewer */
     #viewer img.page {
       display: block;
       max-width: 100%;
@@ -121,23 +143,34 @@
         flex-direction: column;
         text-align: center;
       }
+
       header img {
         position: static;
         display: block;
         margin: 0 auto 10px auto;
       }
+
       header h1 {
         font-size: 1.5rem;
       }
+
       header h3 {
         font-size: 1rem;
       }
-      header .signatures {
+
+      .signatures {
         flex-direction: column;
+        text-align: center;
         margin-top: 1.5in;
         padding: 0 20px;
-        font-size: 0.95rem;
+        font-size: 1rem;
+        gap: 15px;
       }
+
+      .sign-left, .sign-right {
+        text-align: center !important;
+      }
+
       #viewer img.page {
         margin: 8px auto;
         width: 100%;
@@ -147,6 +180,7 @@
 </head>
 
 <body>
+  <!-- 🔹 Topbar -->
   <div class="topbar">
     <div class="brand">
       Exam Portal <br> Department of Mathematics <br> DBS PG College Kanpur
@@ -160,17 +194,28 @@
     </div>
   </div>
 
+  <!-- 🔹 Viewer Section -->
   <div id="viewerWrap">
     <header>
+      <!-- College Logo -->
       <img src="logo.png" alt="College Logo">
-      <div>
+
+      <!-- College Name -->
+      <div class="title">
         <h1>DBS PG College, Kanpur</h1>
         <h3>Department of Mathematics</h3>
       </div>
 
+      <!-- Signature Section -->
       <div class="signatures">
-        <span>Dr. Ashish Kumar Shukla<br><small>Assistant Professor</small></span>
-        <span>Prof. Anil Kumar Mishra<br><small>Principal</small></span>
+        <div class="sign-left">
+          <span style="color:#2b6cb0;">Dr. Ashish Kumar Shukla</span><br>
+          <small>Assistant Professor</small>
+        </div>
+        <div class="sign-right">
+          <span style="color:#8b0000;">Prof. Anil Kumar Mishra</span><br>
+          <small>Principal</small>
+        </div>
       </div>
     </header>
 
