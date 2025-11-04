@@ -1,6 +1,6 @@
 // script.js
 const DURATION_MINUTES = 120; // 2 hours
-const pages = ['page1.png','page2.png']; // images for pages
+const pages = ['exam-1.png', 'exam-2.png', 'exam-3.png']; // images for pages
 const startBtn = document.getElementById('startBtn');
 const viewer = document.getElementById('viewer');
 const preMessage = document.getElementById('preMessage');
